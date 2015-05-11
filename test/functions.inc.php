@@ -11,3 +11,5 @@ function showTest($code) {
 	$return .= str_repeat('-', 80) . "\n";
 	echo $return;
 }
+
+$testCounter = 1;
