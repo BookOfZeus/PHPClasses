@@ -31,4 +31,65 @@ class Memory extends Memcached {
 		parent::__construct();
 		$this->addServer("127.0.0.1", 11211);
 	}
+
+	/**
+	 * deleteAllKeys()
+	 * Delete all keys stored
+	 */
+	public function deleteAllKeys() {
+		$list = $this->getAllKeys();
+		foreach($list as $k => $v) {
+			$this->delete($v);
+		}
+	}
+
+	/**
+	 * getKey()
+	 * Get the value of a stored key
+	 */
+	public function getKey($key) {
+		$key = trim($key);
+		return $this->get($line);
+	}
+
+	#
+	# Command line request
+	#
+
+	/**
+	 * cmd_getKey()
+	 * Get the value of a stored key via command line
+	 */
+	public function cmd_getKey($key) {
+		fwrite(STDOUT, "Please enter the key: ");
+		$line = trim(fgets(STDIN));
+		echo "\n";
+		echo $this->getKey($line);
+		echo "\n";
+	}
+
+	/**
+	 * cmd_deleteKey()
+	 * Delete a stored key via command line
+	 */
+	public function cmd_getKey($key) {
+		fwrite(STDOUT, "Please enter the key: ");
+		$line = trim(fgets(STDIN));
+		$this->delete($line);
+		echo "\nThe value is now:\n ";
+		echo $this->getKey($line);
+		echo "\n";
+	}
+
+	/**
+	 * cmd_flush()
+	 * Delete everything!
+	 */
+	public function cmd_flush() {
+		$result = $mc->flush();
+		echo "\n";
+		var_dump($result);
+		echo "\n";
+	}
+
 }
