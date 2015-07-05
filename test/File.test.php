@@ -1,42 +1,79 @@
 <?php
 
+require('../File.class.php');
 require('functions.inc.php');
 
-require('../File.class.php');
+/** Tests **/
 
-class FileTest extends File {
+function test_isEmpty() {
+	$valid = 0;
 
+	// Check empty first
+	$file = new File(10);
+	$nb = $file->getNumberItems();
+	$valid += assertTrue(__FUNCTION__ . ": The list is empty", $nb == 0);
+
+	return $valid;
 }
 
-$File1 = new File(5);
-for($i = 1; $i <= 10; $i++) {
-	$File1->add($i);
+function test_add() {
+	$valid = 0;
+
+	// Check empty first
+	$file = new File(2);
+	$nb = $file->getNumberItems();
+	$valid += assertTrue(__FUNCTION__ . ": The list is empty", $nb == 0);
+
+	$file->add(17);
+
+	$nb = $file->getNumberItems();
+	$valid += assertTrue(__FUNCTION__ . ": The file has 1 item", $nb == 1);
+
+	$file->add(170);
+
+	$nb = $file->getNumberItems();
+	$valid += assertTrue(__FUNCTION__ . ": The file has 2 item", $nb == 2);
+
+	$file->add(1700);
+
+	$nb = $file->getNumberItems();
+	$valid += assertTrue(__FUNCTION__ . ": The file has 2 item", $nb == 2);
+
+	return $valid;
 }
-showTest('Test ' . $testCounter++, "Current item: " . $File1->get(), "Total items: " . $File1->getNumberItems());
 
-$File2 = new File(3);
-$File2->add('John Doe');
-$File2->add('Jane Smith');
-showTest('Test ' . $testCounter++, "Current item: " . $File2->get(), "Total items: " . $File2->getNumberItems());
+function test_remove() {
+	$valid = 0;
 
-$File3 = new File(10);
-for($i = 1; $i <= 10; $i++) {
-	$File3->add($i);
+	// Check empty first
+	$file = new File(3);
+
+	$file->add(17);
+	$file->add(170);
+	$file->add(1700);
+
+	$nb = $file->getNumberItems();
+	$valid += assertTrue(__FUNCTION__ . ": The file has 2 item", $nb == 3);
+
+	$file->remove(1);
+
+	$nb = $file->getNumberItems();
+	$valid += assertTrue(__FUNCTION__ . ": The file has 1 item", $nb == 2);
+
+	$file->remove(10);
+
+	$nb = $file->getNumberItems();
+	$valid += assertTrue(__FUNCTION__ . ": The file has 0 item", $nb == 0);
+
+	return $valid;
 }
-$File3->remove(3);
-showTest('Test ' . $testCounter++, "Current item: " . $File3->get(), "Total items: " . $File3->getNumberItems());
 
-$File4 = new File(10);
-for($i = 1; $i <= 10; $i++) {
-	$File4->add($i);
+function getUnitTest() {
+	$id = 0;
+
+	$list[$id++] = "test_isEmpty";
+	$list[$id++] = "test_add";
+	$list[$id++] = "test_remove";
+
+	return $list;
 }
-$File4->remove(30);
-showTest('Test ' . $testCounter++, "Current item: " . $File4->get(), "Total items: " . $File4->getNumberItems());
-
-$File5 = new File(3);
-for($i = 1; $i <= 10; $i++) {
-	$File5->add($i);
-}
-showTest('Test ' . $testCounter++, "Current item: " . $File5->get(), "Total items: " . $File5->getNumberItems());
-
-echo "\n";

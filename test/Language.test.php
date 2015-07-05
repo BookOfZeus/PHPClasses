@@ -1,23 +1,60 @@
 <?php
 
+require('../Language.class.php');
 require('functions.inc.php');
 
-require('../Language.class.php');
+/** Tests **/
 
-class LanguageTest extends Language {
+function test_default() {
+	$valid = 0;
 
+	$lang = new Language();
+
+	$code = $lang->getCode();
+	$valid += assertTrue(__FUNCTION__ . ": The code should be en-us", $code == 'en-us');
+
+	$language = $lang->getLanguage();
+	$valid += assertTrue(__FUNCTION__ . ": The language should be English (United States)", $language == 'English (United States)');
+
+	return $valid;
 }
 
-$Lang1 = new LanguageTest();
-showTest('Test ' . $testCounter++, $Lang1->getLanguage(), $Lang1->getCode());
+function test_zh_hk() {
+	$valid = 0;
 
+	$lang = new Language();
+	$lang->setLanguage('zh-hk');
 
-$Lang2 = new LanguageTest();
-$Lang2->setLanguage('zh-hk');
-showTest('Test ' . $testCounter++, $Lang2->getLanguage(), $Lang2->getCode());
+	$code = $lang->getCode();
+	$valid += assertTrue(__FUNCTION__ . ": The code should be en-us", $code == 'zh-hk');
 
-$Lang3 = new LanguageTest();
-$Lang3->setLanguage('php');
-showTest('Test ' . $testCounter++, $Lang3->getLanguage(), $Lang3->getCode());
+	$language = $lang->getLanguage();
+	$valid += assertTrue(__FUNCTION__ . ": The language should be English (United States)", $language == 'Chinese (Hong Kong SAR)');
 
-echo "\n";
+	return $valid;
+}
+
+function test_invalid() {
+	$valid = 0;
+
+	$lang = new Language();
+	$lang->setLanguage('php');
+
+	$code = $lang->getCode();
+	$valid += assertTrue(__FUNCTION__ . ": The code should be en-us", $code == 'php');
+
+	$language = $lang->getLanguage();
+	$valid += assertTrue(__FUNCTION__ . ": The language should be English (United States)", $language == 'Unkwown');
+
+	return $valid;
+}
+
+function getUnitTest() {
+	$id = 0;
+
+	$list[$id++] = "test_default";
+	$list[$id++] = "test_zh_hk";
+	$list[$id++] = "test_invalid";
+
+	return $list;
+}

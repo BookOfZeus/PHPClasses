@@ -1,32 +1,75 @@
 <?php
 
+require('../Bitmask.class.php');
 require('functions.inc.php');
 
-require('../Bitmask.class.php');
+/** Tests **/
 
-class BitmaskTest extends Bitmask {
+function test_read() {
+	$valid = 0;
+
+	$bitmask = new Bitmask();
+	$bitmask->set(Bitmask::READ);
+
+	$result = $bitmask->hasPermission(Bitmask::READ);
+	$valid += assertTrue(__FUNCTION__ . ": Should have read permissions", $result === TRUE);
+
+	$result = $bitmask->hasPermission(Bitmask::WRITE);
+	$valid += assertTrue(__FUNCTION__ . ": Should NOT have write permissions", $result === FALSE);
+
+	return $valid;
 }
 
-$Bitmask1 = new Bitmask();
-$Bitmask1->set(Bitmask::READ);
-showTest('Test ' . $testCounter++, $Bitmask1->hasPermission(Bitmask::READ));
+function test_readWrite() {
+	$valid = 0;
 
-$Bitmask2 = new Bitmask();
-$Bitmask2->set(Bitmask::READ);
-showTest('Test ' . $testCounter++, $Bitmask2->hasPermission(Bitmask::WRITE));
+	$bitmask = new Bitmask();
+	$bitmask->set(Bitmask::READ | Bitmask::WRITE);
 
-$Bitmask3 = new Bitmask();
-$Bitmask3->set(Bitmask::READ | Bitmask::WRITE);
-showTest('Test ' . $testCounter++, $Bitmask3->hasPermission(Bitmask::READ));
-showTest('Test ' . $testCounter++, $Bitmask3->hasPermission(Bitmask::WRITE));
-showTest('Test ' . $testCounter++, $Bitmask3->hasPermission(Bitmask::READ & Bitmask::WRITE));
-showTest('Test ' . $testCounter++, $Bitmask3->hasPermission(Bitmask::READ | Bitmask::UPDATE));
+	$result = $bitmask->hasPermission(Bitmask::READ);
+	$valid += assertTrue(__FUNCTION__ . ": Should have read permissions", $result === TRUE);
 
-$Bitmask4 = new Bitmask();
-$Bitmask4->set(Bitmask::READ | Bitmask::WRITE);
-showTest('Test ' . $testCounter++, $Bitmask4->hasPermission(Bitmask::WRITE));
-$Bitmask4->revoke(Bitmask::WRITE);
-showTest('Test ' . $testCounter++, $Bitmask4->hasPermission(Bitmask::WRITE));
+	$result = $bitmask->hasPermission(Bitmask::WRITE);
+	$valid += assertTrue(__FUNCTION__ . ": Should have write permissions", $result === TRUE);
 
+	$result = $bitmask->hasPermission(Bitmask::READ | Bitmask::WRITE);
+	$valid += assertTrue(__FUNCTION__ . ": Should have read/write permissions", $result === TRUE);
 
+	$result = $bitmask->hasPermission(Bitmask::UPDATE);
+	$valid += assertTrue(__FUNCTION__ . ": Should NOT have update permissions", $result === FALSE);
 
+	return $valid;
+}
+
+function test_revoke() {
+	$valid = 0;
+
+	$bitmask = new Bitmask();
+	$bitmask->set(Bitmask::READ | Bitmask::WRITE);
+
+	$result = $bitmask->hasPermission(Bitmask::READ);
+	$valid += assertTrue(__FUNCTION__ . ": Should have read permissions", $result === TRUE);
+
+	$result = $bitmask->hasPermission(Bitmask::WRITE);
+	$valid += assertTrue(__FUNCTION__ . ": Should have write permissions", $result === TRUE);
+
+	$bitmask->revoke(Bitmask::WRITE);
+
+	$result = $bitmask->hasPermission(Bitmask::READ);
+	$valid += assertTrue(__FUNCTION__ . ": Should have read permissions", $result === TRUE);
+
+	$result = $bitmask->hasPermission(Bitmask::WRITE);
+	$valid += assertTrue(__FUNCTION__ . ": Should POT have write permissions", $result === FALSE);
+
+	return $valid;
+}
+
+function getUnitTest() {
+	$id = 0;
+
+	$list[$id++] = "test_read";
+	$list[$id++] = "test_readWrite";
+	$list[$id++] = "test_revoke";
+
+	return $list;
+}

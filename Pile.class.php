@@ -60,7 +60,7 @@ class Pile {
 
 	/**
 	 * remove()
-	 * Remove items from the list
+	 * Remove a number of items from the list
 	 *
 	 * @param	Integer	$nb	Number of item to remove
 	 * @return	Boolean

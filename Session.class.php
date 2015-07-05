@@ -7,7 +7,6 @@
  * @package     PHPClasses
  * @subpackage  Core
  * @link        https://github.com/BookOfZeus/php-classes
- *
  */
 
 /**
@@ -18,21 +17,25 @@
  * @package     PHPClasses
  * @subpackage  Session
  */
-class Session {
+class Session extends Core {
 
 	/**
-	 * Error message;
-	 *
-	 * @var Mixed
+	 * Const for default expired time
 	 */
-	private $error;    
+	const EXP_TIME = 28800;
 
 	/**
-	 * Database handler.
+	 * Session DB
 	 *
 	 * @var Object
 	 */
 	private $db;
+	/**
+	 * Session Id
+	 *
+	 * @var String
+	 */
+	private $sessionId;
 
 	/**
 	 * Session Constructor.
@@ -40,7 +43,6 @@ class Session {
 	 * @param Object $db    Database Handler object.
 	 */
 	function __construct(&$db) {
-		$this->error = '';
 		$this->db = $db;
 		session_set_save_handler(
 			array(&$this, "open"),
@@ -75,77 +77,73 @@ class Session {
 	/**
 	 * Check if the session is alive
 	 *
-	 * @param  String $sessionId   Session Id.
 	 * @return Bool
 	 */
-	public function isAlive($sessionId) {
+	public function isAlive($sid) {
 		try {
-			$rows = $this->db->prepare("SELECT `id` FROM `session`.`session` WHERE `id` = :sessionId");
-			$rows->bindParam(':sessionId', $sessionId, PDO::PARAM_STR, 32);
+			$rows = $this->db->prepare("SELECT `id` FROM `session` WHERE `id` = :sessionId");
+			$rows->bindParam(':sessionId', $sid, PDO::PARAM_STR, 32);
 			$rows->execute();
 			$data = $rows->fetch(PDO::FETCH_ASSOC);
-			return $data['id'] == $sessionId;            
+			return $data['id'] == $this->sessionId;
 		}
 		catch (PDOException $e) {
-			$this->error = $e;
+			$this->setMessage(1, $e->getMessage());
 		}
 	}
 
 	/**
 	 * Read the sessoin information.
 	 *
-	 * @param  String $sessionId   Session Id.
 	 * @return Array
 	 */
-	public function read($sessionId) {
+	public function read($sid) {
 		try {
-			$rows = $this->db->prepare("SELECT `data` FROM `session`.`session` WHERE `id` = :sessionId");
-			$rows->bindParam(':sessionId', $sessionId, PDO::PARAM_STR, 32);
-			$rows->execute();
+			$rows = $this->db->prepare("SELECT `data` FROM `session` WHERE `id` = :sessionId");
+			$rows->bindParam(':sessionId', $sid, PDO::PARAM_STR, 32);
+			$result = $rows->execute();
 			$data = $rows->fetch(PDO::FETCH_ASSOC);
-			return $data['data'];            
+			return $data['data'];
 		}
 		catch (PDOException $e) {
-			$this->error = $e;
+			$this->setMessage(1, $e->getMessage());
 		}
 	}
 
 	/**
 	 * Replace the sessions data.
 	 *
-	 * @param  String $sessionId   Session Id.
-	 * @param  Array  $sessData Session data.
+	 * @param  Array  $data Session data.
 	 * @return Boolean
 	 */
-	public function write($sessionId, $sessData) {
+	public function write($sid, $data) {
 		$time = isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time();
 		try {
-			$expTime = $time + 28800; // 60 * 60 * 8
-			$rows = $this->db->prepare("REPLACE INTO `session`.`session` set `id` = :sessionId, `data` = :data, `expires` = :date");
-			$rows->bindParam(':sessionId', $sessionId, PDO::PARAM_STR, 32);
-			$rows->bindParam(':data', $sessData, PDO::PARAM_LOB);
-			$rows->bindParam(':date', $expTime, PDO::PARAM_STR, 20);
+			$time = $time + self::EXP_TIME;
+			$rows = $this->db->prepare("REPLACE INTO `session` set `id` = :sessionId, `data` = :data, `expires` = FROM_UNIXTIME(:expires)");
+			$rows->bindParam(':sessionId', $sid, PDO::PARAM_STR, 32);
+			$rows->bindParam(':data', $data, PDO::PARAM_LOB);
+			$rows->bindParam(':expires', $time, PDO::PARAM_INT);
 			return $rows->execute();
 		}
 		catch (PDOException $e) {
-			$this->error = $e;
+			$this->setMessage(1, $e->getMessage());
 		}
 	}
 
 	/**
 	 * Destroy a session.
 	 *
-	 * @param  String $sessionId   Session Id.
 	 * @return Boolean
 	 */
-	public function destroy($sessionId) {
+	public function destroy($sid) {
 		try {
-			$rows = $this->db->prepare("DELETE FROM `session`.`session` WHERE `id` = :sessionId");
-			$rows->bindParam(':sessionId', $sessionId, PDO::PARAM_STR, 32);
+			$rows = $this->db->prepare("DELETE FROM `session` WHERE `id` = :sessionId");
+			$rows->bindParam(':sessionId', $sid, PDO::PARAM_STR, 32);
 			return $rows->execute();
 		}
 		catch (PDOException $e) {
-			$this->error = $e;
+			$this->setMessage(1, $e->getMessage());
 		}
 	}
 
@@ -155,23 +153,15 @@ class Session {
 	 * @return Boolean
 	 */
 	public function garbageCollector() {
-		return TRUE;
-	}
-
-	/**
-	 * Cleanup function removes expired sessions from the database.
-	 *
-	 * @param Object $timestamp Timestamp.
-	 * @return Mixed
-	 */
-	public static function clearSession($timestamp) {
+		$time = isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time();
 		try {
-			$rows = $this->db->prepare("DELETE FROM `session`.`session` WHERE `expires` < :time");
-			$rows->bindParam(':time', $timestamp);
+			$time = $time + self::EXP_TIME;
+			$rows = $this->db->prepare("DELETE FROM `session` WHERE `expires` < :time");
+			$rows->bindParam(':time', $time);
 			return $rows->execute();
 		}
 		catch (PDOException $e) {
-			return $e;
+			$this->setMessage(1, $e->getMessage());
 		}
 	}
 }

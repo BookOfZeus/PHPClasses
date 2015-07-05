@@ -1,35 +1,79 @@
 <?php
 
+require('../Sanitize.class.php');
 require('functions.inc.php');
 
-require('../Sanitize.class.php');
+/** Tests **/
 
-class SanitizeTest extends Sanitize {
+function test_cleanText() {
+	$valid = 0;
+
+	$list = array(
+		"Test With Bad Char '\"" => "Test With Bad Char &#039;&quot;",
+		"Test With Bad Char '\" @ :~/" => "Test With Bad Char &#039;&quot; @ :~/"
+
+	);
+
+	foreach($list as $k => $v) {
+		Sanitize::clean($k);
+		$valid += assertTrue(__FUNCTION__ . ": Bad char removed/converted", $k == $v);
+	}
+
+	return $valid;
 }
 
-$var1 = "Test With Bad Char '\"";
-SanitizeTest::clean($var1);
-showTest('Test ' . $testCounter++, "Variable: " . $var1);
+function test_cleanFile() {
+	$valid = 0;
 
-$_POST['key'] = "Test With Bad Char '\" @ :~/";
-SanitizeTest::clean($_POST['key']);
-showTest('Test ' . $testCounter++, "Variable: " . $_POST['key']);
+	$list = array(
+		"my_file_name_with bad_char\/'.zip" => 'my_file_name_withbad_char.zip'
+	);
 
-$file = "my_file_name_with bad_char\/'.zip";
-SanitizeTest::clean($file, Sanitize::SANITIZE_FILE_FOLDER);
-showTest('Test ' . $testCounter++, "Variable: " . $file);
+	foreach($list as $k => $v) {
+		Sanitize::clean($k, Sanitize::SANITIZE_FILE_FOLDER);
+		$valid += assertTrue(__FUNCTION__ . ": Bad char removed/converted", $k == $v);
+	}
 
-$email = "my_'email\"\@domain _.com";
-SanitizeTest::clean($email, Sanitize::SANITIZE_EMAIL);
-showTest('Test ' . $testCounter++, "Variable: " . $email);
+	return $valid;
+}
 
-$array = array(
-	'var1' => "Test With Bad Char '\"",
-	'var2' => "½¼³¤¢£@±\)(*&$/!| '\""
-);
+function test_cleanEmail() {
+	$valid = 0;
 
-Sanitize::cleanAll($array);
-showTest('Test ' . $testCounter++, "Variable: " . print_r($array,1));
+	$list = array(
+		"my_'email\"\@domain _.com" => "my_email@domain_.com"
+	);
 
+	foreach($list as $k => $v) {
+		Sanitize::clean($k, Sanitize::SANITIZE_EMAIL);
+		$valid += assertTrue(__FUNCTION__ . ": Bad char removed/converted", $k == $v);
+	}
 
-echo "\n";
+	return $valid;
+}
+
+function test_cleanAll() {
+	$valid = 0;
+
+	$list = array(
+		'var1' => "Test With Bad Char '\"",
+		'var2' => "½¼³¤¢£@±\)(*&$/!| '\""
+	);
+
+	Sanitize::cleanAll($list);
+	$valid += assertTrue(__FUNCTION__ . ": Bad char removed/converted", $list['var1'] == 'Test With Bad Char &#039;&quot;');
+	$valid += assertTrue(__FUNCTION__ . ": Bad char removed/converted", $list['var2'] == '&frac12;&frac14;&sup3;&curren;&cent;&pound;@&plusmn;\)(*&amp;$/!| &#039;&quot;');
+
+	return $valid;
+}
+
+function getUnitTest() {
+	$id = 0;
+
+	$list[$id++] = "test_cleanText";
+	$list[$id++] = "test_cleanFile";
+	$list[$id++] = "test_cleanEmail";
+	$list[$id++] = "test_cleanAll";
+
+	return $list;
+}

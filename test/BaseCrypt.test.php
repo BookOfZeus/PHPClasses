@@ -1,26 +1,33 @@
 <?php
 
+require('../BaseCrypt.class.php');
 require('functions.inc.php');
 
-require('../BaseCrypt.class.php');
+/** Tests **/
 
-class BaseCryptTest extends BaseCrypt {
+function test_getHash() {
+	$valid = 0;
+
+	$list = array(
+		1 => 'cJio3',
+		41 => 'L2d5z',
+		733 => '1AjhT',
+		82821 => 'C1VlT',
+		467343 => 'rYWFN',
+	);
+
+	foreach($list as $k => $v) {
+		$test = BaseCrypt::getHash($k);
+		$valid += assertTrue(__FUNCTION__ . ": The key $k should be $v", $v == $test);
+	}
+
+	return $valid;
 }
 
-$test1 = BaseCryptTest::getHash(1);
-showTest('Test ' . $testCounter++, $test1);
+function getUnitTest() {
+	$id = 0;
 
-$test2 = BaseCryptTest::getHash(1517);
-showTest('Test ' . $testCounter++, $test2);
+	$list[$id++] = "test_getHash";
 
-$test3 = BaseCryptTest::getHash(14958187511);
-showTest('Test ' . $testCounter++, $test3);
-
-$test4 = BaseCryptTest::getHash(1517, 7);
-showTest('Test ' . $testCounter++, $test4);
-
-$test5 = BaseCryptTest::getHash(627, 0);
-showTest('Test ' . $testCounter++, $test5);
-
-$test6 = BaseCryptTest::getHash(882287, 1);
-showTest('Test ' . $testCounter++, $test6);
+	return $list;
+}
