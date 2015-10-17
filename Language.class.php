@@ -6,7 +6,7 @@
  * @author      Eric Potvin
  * @package 	PHPClasses
  * @subpackage  Language
- * @link        https://github.com/BookOfZeus/php-classes
+ * @link        https://github.com/ericpotvin/phpclasses
  */
 
 /**

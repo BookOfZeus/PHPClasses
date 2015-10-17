@@ -6,7 +6,7 @@
  * @author      Eric Potvin
  * @package     PHPClasses
  * @subpackage  Memory
- * @link        https://github.com/BookOfZeus/php-classes
+ * @link        https://github.com/ericpotvin/phpclasses
  */
 
 if(!class_exists('Memcached')) {
