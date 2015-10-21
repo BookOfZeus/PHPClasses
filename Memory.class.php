@@ -72,7 +72,7 @@ class Memory extends Memcached {
 	 * cmd_deleteKey()
 	 * Delete a stored key via command line
 	 */
-	public function cmd_getKey($key) {
+	public function cmd_deleteKey($key) {
 		fwrite(STDOUT, "Please enter the key: ");
 		$line = trim(fgets(STDIN));
 		$this->delete($line);
