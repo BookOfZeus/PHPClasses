@@ -5,7 +5,8 @@ require('functions.inc.php');
 
 /** Tests **/
 
-function test_getHash() {
+function test_getHash()
+{
 	$valid = 0;
 
 	$list = array(
@@ -16,7 +17,8 @@ function test_getHash() {
 		467343 => 'rYWFN',
 	);
 
-	foreach($list as $k => $v) {
+	foreach($list as $k => $v)
+{
 		$test = BaseCrypt::getHash($k);
 		$valid += assertTrue(__FUNCTION__ . ": The key $k should be $v", $v == $test);
 	}
@@ -24,7 +26,8 @@ function test_getHash() {
 	return $valid;
 }
 
-function getUnitTest() {
+function getUnitTest()
+{
 	$id = 0;
 
 	$list[$id++] = "test_getHash";

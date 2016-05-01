@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Core Class [ Core.class.php ]
  *
- * @author      Eric Potvin
- * @package 	PHPClasses
- * @subpackage  Core
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Core
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -51,14 +50,16 @@ abstract class Core {
 	 * Core Constructor.
 	 *
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
 	/**
 	 * Core Destructor
 	 *
 	 */
-	public function __destruct() {
+	public function __destruct()
+	{
 	}
 
 	//
@@ -72,7 +73,8 @@ abstract class Core {
 	 * @param  Integer	$no		Error Number
 	 * @param  String	$msg	Message
 	 */
-	public function setMessage($no, $msg) {
+	public function setMessage($no, $msg)
+	{
 		$this->errorId = (int)$no;
 		$this->errorMsg = $msg;
 	}
@@ -83,7 +85,8 @@ abstract class Core {
 	 *
 	 * @return	Integer
 	 */
-	public function getErrorId() {
+	public function getErrorId()
+	{
 		return $this->errorId;
 	}
 
@@ -93,7 +96,8 @@ abstract class Core {
 	 *
 	 * @return	String
 	 */
-	public function getErrorMsg() {
+	public function getErrorMsg()
+	{
 		return $this->errorMsg;
 	}
 
@@ -104,7 +108,8 @@ abstract class Core {
 	 * @param	String	$mode	
 	 * @return	String
 	 */
-	public function getFormatedError($mode = Core::FORMAT_JSON) {
+	public function getFormatedError($mode = Core::FORMAT_JSON)
+	{
 		$data = array(
 			'error' => $this->errorId,
 			'message' => $this->errorMsg

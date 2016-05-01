@@ -5,7 +5,8 @@ require('functions.inc.php');
 
 /** Tests **/
 
-function test_isEmpty() {
+function test_isEmpty()
+{
 	$valid = 0;
 
 	// Check empty first
@@ -16,7 +17,8 @@ function test_isEmpty() {
 	return $valid;
 }
 
-function test_add() {
+function test_add()
+{
 	$valid = 0;
 
 	// Check empty first
@@ -42,7 +44,8 @@ function test_add() {
 	return $valid;
 }
 
-function test_remove() {
+function test_remove()
+{
 	$valid = 0;
 
 	// Check empty first
@@ -68,7 +71,8 @@ function test_remove() {
 	return $valid;
 }
 
-function getUnitTest() {
+function getUnitTest()
+{
 	$id = 0;
 
 	$list[$id++] = "test_isEmpty";

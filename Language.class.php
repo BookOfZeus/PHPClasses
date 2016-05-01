@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Language Class [ Language.class.php ]
  *
- * @author      Eric Potvin
- * @package 	PHPClasses
- * @subpackage  Language
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Language
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -205,8 +204,11 @@ class Language {
 	 * Language Constructor.
 	 *
 	 */
-	public function __construct() {
-		$this->code = empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? self::DEFAULT_LANGUAGE : $this->getUserDefinedLanguage();
+	public function __construct()
+	{
+		$this->code = empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])
+			? self::DEFAULT_LANGUAGE
+			: $this->getUserDefinedLanguage();
 		$this->setLanguage($this->code);
 	}
 
@@ -216,14 +218,15 @@ class Language {
 	 *
 	 * @return	String
 	 */
-	private function getUserDefinedLanguage() {
+	private function getUserDefinedLanguage()
+	{
 		$langs = explode(",", $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		foreach($langs as $lang) {
 			if(substr_count($lang, ';') == 0) {
 				$lang .= ';q=1';
 			}
 
-			list($cL, $ratio) = explode(";q=",$lang);
+			list($cL, $ratio) = explode(";q=", $lang);
 			$list[$cL] = $ratio;
 		}
 		$list = array_flip($list);
@@ -237,7 +240,8 @@ class Language {
 	 *
 	 * @param	String	$code	The language code
 	 */
-	public function setLanguage($code) {
+	public function setLanguage($code)
+	{
 		if(!isset(self::$allLanguage[$this->code])) {
 			$this->code = '??';
 			$this->language = self::UNKNOWN_LANGUAGE;
@@ -254,7 +258,8 @@ class Language {
 	 *
 	 * @return	String
 	 */
-	public function getCode() {
+	public function getCode()
+	{
 		return $this->code;
 	}
 
@@ -264,8 +269,10 @@ class Language {
 	 *
 	 * @return	String
 	 */
-	public function getLanguage() {
-		return isset(self::$allLanguage[$this->code]) ? self::$allLanguage[$this->code] : self::UNKNOWN_LANGUAGE;
+	public function getLanguage()
+	{
+		return isset(self::$allLanguage[$this->code])
+			? self::$allLanguage[$this->code]
+			: self::UNKNOWN_LANGUAGE;
 	}
-
 }

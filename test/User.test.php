@@ -4,8 +4,6 @@ require('../Core.class.php');
 require('../User.class.php');
 require('functions.inc.php');
 
-/** Need DB **/
-
 /*
 	CREATE DATABASE test_db;
 	USE test_db;
@@ -22,10 +20,10 @@ require('functions.inc.php');
 
 */
 
-
 /** Tests **/
 
-function test_isLogged() {
+function test_isLogged()
+{
 	$valid = 0;
 
 	$user = new user('id');
@@ -35,7 +33,8 @@ function test_isLogged() {
 	return $valid;
 }
 
-function test_validLogin() {
+function test_validLogin()
+{
 	$valid = 0;
 
 	$user = new user('id');
@@ -48,7 +47,8 @@ function test_validLogin() {
 	return $valid;
 }
 
-function test_updatePass() {
+function test_updatePass()
+{
 	$valid = 0;
 
 	// hack
@@ -72,7 +72,8 @@ function test_updatePass() {
 	return $valid;
 }
 
-function getUnitTest() {
+function getUnitTest()
+{
 
 	$GLOBALS['dbc'] = new PDO('mysql:host=localhost;dbname=test_db', 'root', '', array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => TRUE));
 	$GLOBALS['dbc']->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);

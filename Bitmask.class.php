@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Bitmask Class [ Bitmask.class.php ]
  *
- * @author      Eric Potvin
- * @package 	PHPClasses
- * @subpackage  Bitmask
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Bitmask
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -47,7 +46,8 @@ class Bitmask {
 	 * Core Constructor.
 	 *
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		$this->permission = 0;
 	}
 
@@ -58,7 +58,8 @@ class Bitmask {
 	 * @param  Integer	$perm	Permission Constant
 	 * @param  Boolean
 	 */
-	public function hasPermission($perm) {
+	public function hasPermission($perm)
+	{
 		return ($this->permission & $perm) > 0;
 	}
 
@@ -68,7 +69,8 @@ class Bitmask {
 	 *
 	 * @param  Integer	$perm	Permission Constant
 	 */
-	public function set($perm) {
+	public function set($perm)
+	{
 		$this->permission |= $perm;
 	}
 
@@ -78,8 +80,8 @@ class Bitmask {
 	 *
 	 * @param  Integer	$perm	Permission Constant
 	 */
-	public function revoke($perm) {
+	public function revoke($perm)
+	{
 		$this->permission &= ~$perm;
 	}
-
 }

@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Memory Class [ Memory.class.php ]
  *
- * @author      Eric Potvin
- * @package     PHPClasses
- * @subpackage  Memory
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Memory
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 if(!class_exists('Memcached')) {
@@ -27,7 +26,8 @@ class Memory extends Memcached {
 	 * Core Constructor.
 	 *
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->addServer("127.0.0.1", 11211);
 	}
@@ -36,7 +36,8 @@ class Memory extends Memcached {
 	 * deleteAllKeys()
 	 * Delete all keys stored
 	 */
-	public function deleteAllKeys() {
+	public function deleteAllKeys()
+	{
 		$list = $this->getAllKeys();
 		foreach($list as $k => $v) {
 			$this->delete($v);
@@ -47,20 +48,18 @@ class Memory extends Memcached {
 	 * getKey()
 	 * Get the value of a stored key
 	 */
-	public function getKey($key) {
+	public function getKey($key)
+	{
 		$key = trim($key);
 		return $this->get($line);
 	}
-
-	#
-	# Command line request
-	#
 
 	/**
 	 * cmd_getKey()
 	 * Get the value of a stored key via command line
 	 */
-	public function cmd_getKey($key) {
+	public function cmdGetKey($key)
+	{
 		fwrite(STDOUT, "Please enter the key: ");
 		$line = trim(fgets(STDIN));
 		echo "\n";
@@ -72,7 +71,8 @@ class Memory extends Memcached {
 	 * cmd_deleteKey()
 	 * Delete a stored key via command line
 	 */
-	public function cmd_deleteKey($key) {
+	public function cmdDeleteKey($key)
+	{
 		fwrite(STDOUT, "Please enter the key: ");
 		$line = trim(fgets(STDIN));
 		$this->delete($line);
@@ -85,7 +85,8 @@ class Memory extends Memcached {
 	 * cmd_flush()
 	 * Delete everything!
 	 */
-	public function cmd_flush() {
+	public function cmdFlush()
+	{
 		$result = $mc->flush();
 		echo "\n";
 		var_dump($result);

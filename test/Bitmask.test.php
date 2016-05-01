@@ -5,7 +5,8 @@ require('functions.inc.php');
 
 /** Tests **/
 
-function test_read() {
+function test_read()
+{
 	$valid = 0;
 
 	$bitmask = new Bitmask();
@@ -20,7 +21,8 @@ function test_read() {
 	return $valid;
 }
 
-function test_readWrite() {
+function test_readWrite()
+{
 	$valid = 0;
 
 	$bitmask = new Bitmask();
@@ -41,7 +43,8 @@ function test_readWrite() {
 	return $valid;
 }
 
-function test_revoke() {
+function test_revoke()
+{
 	$valid = 0;
 
 	$bitmask = new Bitmask();
@@ -64,7 +67,8 @@ function test_revoke() {
 	return $valid;
 }
 
-function getUnitTest() {
+function getUnitTest()
+{
 	$id = 0;
 
 	$list[$id++] = "test_read";

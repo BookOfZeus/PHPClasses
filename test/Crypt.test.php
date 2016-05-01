@@ -5,7 +5,8 @@ require('functions.inc.php');
 
 /** Tests **/
 
-function test_r256() {
+function test_r256()
+{
 	$valid = 0;
 
 	$crypTest = new Crypt(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
@@ -18,7 +19,8 @@ function test_r256() {
 	return $valid;
 }
 
-function test_r128() {
+function test_r128()
+{
 	$valid = 0;
 
 	$crypTest = new Crypt(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
@@ -31,7 +33,8 @@ function test_r128() {
 	return $valid;
 }
 
-function test_c256() {
+function test_c256()
+{
 	$valid = 0;
 
 	$crypTest = new Crypt(MCRYPT_CAST_256, MCRYPT_MODE_CBC);
@@ -44,7 +47,8 @@ function test_c256() {
 	return $valid;
 }
 
-function getUnitTest() {
+function getUnitTest()
+{
 	$id = 0;
 
 	$list[$id++] = "test_r256";

@@ -5,7 +5,8 @@ require('functions.inc.php');
 
 /** Tests **/
 
-function test_default() {
+function test_default()
+{
 	$valid = 0;
 
 	$lang = new Language();
@@ -19,7 +20,8 @@ function test_default() {
 	return $valid;
 }
 
-function test_zh_hk() {
+function test_zh_hk()
+{
 	$valid = 0;
 
 	$lang = new Language();
@@ -34,7 +36,8 @@ function test_zh_hk() {
 	return $valid;
 }
 
-function test_invalid() {
+function test_invalid()
+{
 	$valid = 0;
 
 	$lang = new Language();
@@ -49,7 +52,8 @@ function test_invalid() {
 	return $valid;
 }
 
-function getUnitTest() {
+function getUnitTest()
+{
 	$id = 0;
 
 	$list[$id++] = "test_default";

@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Crypt Class [ Crypt.class.php ]
  *
- * @author      Eric Potvin
- * @package 	PHPClasses
- * @subpackage  Crypt
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Crypt
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -55,13 +54,16 @@ class Crypt {
 	 * @param  String	$cipher	Cipher to use
 	 * @param  String	$mode	Mode to use
 	 */
-	function __construct($cipher = MCRYPT_RIJNDAEL_256, $mode = MCRYPT_MODE_ECB) {
-
+	public function __construct($cipher = MCRYPT_RIJNDAEL_256, $mode = MCRYPT_MODE_ECB)
+	{
 		$this->cipher = $cipher;
 		$this->mode = $mode;
 
 		try {
-			$this->iv = mcrypt_create_iv(mcrypt_get_iv_size($this->cipher, $this->mode), MCRYPT_DEV_RANDOM);
+			$this->iv = mcrypt_create_iv(
+				mcrypt_get_iv_size($this->cipher, $this->mode),
+				MCRYPT_DEV_RANDOM
+			);
 		}
 		catch (Exception $e) {
 			throw new Exception('mcrypt not supported');
@@ -75,8 +77,15 @@ class Crypt {
 	 * @param 	string	$text	Text to encrypt.
 	 * @return 	string
 	 */
-	function encrypt($text) {
-		$passcrypt = mcrypt_encrypt($this->cipher, $this->privateKey, $text, $this->mode, $this->iv);
+	public function encrypt($text)
+	{
+		$passcrypt = mcrypt_encrypt(
+			$this->cipher,
+			$this->privateKey,
+			$text,
+			$this->mode,
+			$this->iv
+		);
 		return base64_encode($passcrypt);
 	}
 
@@ -87,10 +96,16 @@ class Crypt {
 	 * @param 	string	$text	Text to decrypt.
 	 * @return 	string
 	 */
-	function decrypt($text) {
+	public function decrypt($text)
+	{
 		$decoded = base64_decode($text);
-		$decrypted = mcrypt_decrypt($this->cipher, $this->privateKey, $decoded, $this->mode, $this->iv);
+		$decrypted = mcrypt_decrypt(
+			$this->cipher,
+			$this->privateKey,
+			$decoded,
+			$this->mode,
+			$this->iv
+		);
 		return rtrim($decrypted, "\0");
-	} 
-	
+	}
 }

@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Session Class [ Session.class.php ]
  *
- * @author      Eric Potvin
- * @package     PHPClasses
- * @subpackage  Core
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Core
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -42,7 +41,8 @@ class Session extends Core {
 	 *
 	 * @param Object $db    Database Handler object.
 	 */
-	function __construct(&$db) {
+	public function __construct(&$db)
+	{
 		$this->db = $db;
 		session_set_save_handler(
 			array(&$this, "open"),
@@ -62,7 +62,8 @@ class Session extends Core {
 	 * @param  String $sessName  Session Name.
 	 * @return Boolean
 	 */
-	public function open($savePath, $sessName) {
+	public function open($savePath, $sessName)
+	{
 		return TRUE;
 	}
 
@@ -70,7 +71,8 @@ class Session extends Core {
 	 * Close a session.
 	 *
 	 */
-	public function close() {
+	public function close()
+	{
 		return TRUE;
 	}
 
@@ -79,7 +81,8 @@ class Session extends Core {
 	 *
 	 * @return Bool
 	 */
-	public function isAlive($sid) {
+	public function isAlive($sid)
+	{
 		try {
 			$rows = $this->db->prepare("SELECT `id` FROM `session` WHERE `id` = :sessionId");
 			$rows->bindParam(':sessionId', $sid, PDO::PARAM_STR, 32);
@@ -97,9 +100,12 @@ class Session extends Core {
 	 *
 	 * @return Array
 	 */
-	public function read($sid) {
+	public function read($sid)
+	{
 		try {
-			$rows = $this->db->prepare("SELECT `data` FROM `session` WHERE `id` = :sessionId");
+			$rows = $this->db->prepare(
+				"SELECT `data` FROM `session` WHERE `id` = :sessionId"
+			);
 			$rows->bindParam(':sessionId', $sid, PDO::PARAM_STR, 32);
 			$result = $rows->execute();
 			$data = $rows->fetch(PDO::FETCH_ASSOC);
@@ -116,11 +122,15 @@ class Session extends Core {
 	 * @param  Array  $data Session data.
 	 * @return Boolean
 	 */
-	public function write($sid, $data) {
+	public function write($sid, $data)
+	{
 		$time = isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time();
 		try {
 			$time = $time + self::EXP_TIME;
-			$rows = $this->db->prepare("REPLACE INTO `session` set `id` = :sessionId, `data` = :data, `expires` = FROM_UNIXTIME(:expires)");
+			$rows = $this->db->prepare(
+				"REPLACE INTO `session` set `id` = :sessionId, `data` = :data,
+				`expires` = FROM_UNIXTIME(:expires)"
+			);
 			$rows->bindParam(':sessionId', $sid, PDO::PARAM_STR, 32);
 			$rows->bindParam(':data', $data, PDO::PARAM_LOB);
 			$rows->bindParam(':expires', $time, PDO::PARAM_INT);
@@ -136,7 +146,8 @@ class Session extends Core {
 	 *
 	 * @return Boolean
 	 */
-	public function destroy($sid) {
+	public function destroy($sid)
+	{
 		try {
 			$rows = $this->db->prepare("DELETE FROM `session` WHERE `id` = :sessionId");
 			$rows->bindParam(':sessionId', $sid, PDO::PARAM_STR, 32);
@@ -152,7 +163,8 @@ class Session extends Core {
 	 *
 	 * @return Boolean
 	 */
-	public function garbageCollector() {
+	public function garbageCollector()
+	{
 		$time = isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time();
 		try {
 			$time = $time + self::EXP_TIME;

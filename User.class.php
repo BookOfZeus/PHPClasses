@@ -1,12 +1,11 @@
 <?php
-
 /**
  * User Class [ User.class.php ]
  *
- * @author      Eric Potvin
- * @package     PHPClasses
- * @subpackage  Core
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Core
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -32,7 +31,8 @@ class User extends Core {
 	 * @param String $sessionIdKey The key of the _SESSION array.
 	 * @param Object $db    Database Handler object.
 	 */
-	function __construct($sessionIdKey) {
+	public function __construct($sessionIdKey)
+	{
 		$this->sessionIdKey = $sessionIdKey;
 	}
 
@@ -42,8 +42,12 @@ class User extends Core {
 	 *
 	 * @return Boolean
 	 */
-	public function isLogged() {
-		if(!isset($_SESSION[$this->sessionIdKey]) || is_null($_SESSION[$this->sessionIdKey])) {
+	public function isLogged()
+	{
+		if(!isset($_SESSION[$this->sessionIdKey])) {
+			return FALSE;
+		}
+		if(is_null($_SESSION[$this->sessionIdKey]) {
 			return FALSE;
 		}
 		$Session = new Session(session_id());
@@ -56,7 +60,8 @@ class User extends Core {
 	 *
 	 * @return Boolean
 	 */
-	public function logout() {
+	public function logout()
+	{
 		$Session = new Session(session_id());
 		return $Session->destroy();
 	}
@@ -69,8 +74,11 @@ class User extends Core {
 	 * @param  String $pass	The Encrypted Password
 	 * @return Boolean
 	 */
-	public function validLogin($user, $pass) {
-		$rows = $GLOBALS['dbc']->prepare('SELECT `id` FROM `user` WHERE `username` = :username AND `password` = :pass');
+	public function validLogin($user, $pass)
+	{
+		$rows = $GLOBALS['dbc']->prepare(
+			'SELECT `id` FROM `user` WHERE `username` = :username AND `password` = :pass'
+		);
 		$rows->bindParam(':username', $user, PDO::PARAM_STR, 200);
 		$rows->bindParam(':pass', $pass, PDO::PARAM_STR, 255);
 		$rows->execute();
@@ -90,14 +98,17 @@ class User extends Core {
 	 * @param  String $retype The re-typed Encrypted Password
 	 * @return Boolean
 	 */
-	public function updateUserPassword($current, $new, $retype) {
+	public function updateUserPassword($current, $new, $retype)
+	{
 		if($new !== $retype) {
 			return FALSE;
 		}
-		$rows = $GLOBALS['dbc']->prepare('UPDATE `user` SET `password` = :newpassword WHERE `id` = :id AND `password` = :pass');
+		$rows = $GLOBALS['dbc']->prepare(
+			'UPDATE `user` SET `password` = :newpassWHERE `id` = :id AND `password` = :pass'
+		);
 		$rows->bindParam(':id', $_SESSION[$this->sessionIdKey], PDO::PARAM_STR, 200);
 		$rows->bindParam(':pass', $current, PDO::PARAM_STR, 32);
-		$rows->bindParam(':newpassword', $new, PDO::PARAM_STR, 32);
+		$rows->bindParam(':newpass', $new, PDO::PARAM_STR, 32);
 		$rows->execute();
 		return $rows->rowCount();
 	}

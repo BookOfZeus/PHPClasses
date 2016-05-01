@@ -5,7 +5,8 @@ require('functions.inc.php');
 
 /** Tests **/
 
-function test_cleanText() {
+function test_cleanText()
+{
 	$valid = 0;
 
 	$list = array(
@@ -14,7 +15,8 @@ function test_cleanText() {
 
 	);
 
-	foreach($list as $k => $v) {
+	foreach($list as $k => $v)
+{
 		Sanitize::clean($k);
 		$valid += assertTrue(__FUNCTION__ . ": Bad char removed/converted", $k == $v);
 	}
@@ -22,14 +24,16 @@ function test_cleanText() {
 	return $valid;
 }
 
-function test_cleanFile() {
+function test_cleanFile()
+{
 	$valid = 0;
 
 	$list = array(
 		"my_file_name_with bad_char\/'.zip" => 'my_file_name_withbad_char.zip'
 	);
 
-	foreach($list as $k => $v) {
+	foreach($list as $k => $v)
+{
 		Sanitize::clean($k, Sanitize::SANITIZE_FILE_FOLDER);
 		$valid += assertTrue(__FUNCTION__ . ": Bad char removed/converted", $k == $v);
 	}
@@ -37,14 +41,16 @@ function test_cleanFile() {
 	return $valid;
 }
 
-function test_cleanEmail() {
+function test_cleanEmail()
+{
 	$valid = 0;
 
 	$list = array(
 		"my_'email\"\@domain _.com" => "my_email@domain_.com"
 	);
 
-	foreach($list as $k => $v) {
+	foreach($list as $k => $v)
+{
 		Sanitize::clean($k, Sanitize::SANITIZE_EMAIL);
 		$valid += assertTrue(__FUNCTION__ . ": Bad char removed/converted", $k == $v);
 	}
@@ -52,7 +58,8 @@ function test_cleanEmail() {
 	return $valid;
 }
 
-function test_cleanAll() {
+function test_cleanAll()
+{
 	$valid = 0;
 
 	$list = array(
@@ -67,7 +74,8 @@ function test_cleanAll() {
 	return $valid;
 }
 
-function getUnitTest() {
+function getUnitTest()
+{
 	$id = 0;
 
 	$list[$id++] = "test_cleanText";

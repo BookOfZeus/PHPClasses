@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Pile Class [ Pile.class.php ]
  *
- * @author      Eric Potvin
- * @package 	PHPClasses
- * @subpackage  Pile
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Pile
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -37,7 +36,8 @@ class Pile {
 	 *
 	 * @param	Integer	$maxItems	Maximum number of items in the list
 	 */
-	public function __construct($maxItems) {
+	public function __construct($maxItems)
+	{
 		$this->list = array();
 		$this->maxItems = (int)abs($maxItems);
 	}
@@ -49,7 +49,8 @@ class Pile {
 	 * @param	Mixed	$item	The item
 	 * @return	Boolean
 	 */
-	public function add($item) {
+	public function add($item)
+	{
 		$totalItem = $this->getNumberItems();
 		if($totalItem >= $this->maxItems) {
 			return FALSE;
@@ -65,7 +66,8 @@ class Pile {
 	 * @param	Integer	$nb	Number of item to remove
 	 * @return	Boolean
 	 */
-	public function remove($nb = 1) {
+	public function remove($nb = 1)
+	{
 		$totalItem = $this->getNumberItems();
 		if($totalItem == 0) {
 			return FALSE;
@@ -83,7 +85,8 @@ class Pile {
 	 *
 	 * @return	Mixed
 	 */
-	public function get() {
+	public function get()
+	{
 		reset($this->list);
 		$totalItem = $this->getNumberItems();
 		if($totalItem == 0) {
@@ -98,7 +101,8 @@ class Pile {
 	 *
 	 * @return	Integer
 	 */
-	public function getNumberItems() {
+	public function getNumberItems()
+	{
 		return count($this->list);
 	}
 }

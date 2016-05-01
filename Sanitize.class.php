@@ -2,10 +2,10 @@
 /**
  * Sanitize Class [ Sanitize.class.php ]
  *
- * @author      Eric Potvin
- * @package 	PHPClasses
- * @subpackage  Sanitize
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Sanitize
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -48,7 +48,8 @@ class Sanitize {
 	 * @param	Mixed	$val	The variable
 	 * @return	Boolean
 	 */
-	public static function clean(&$val, $method = Sanitize::SANITIZE_DEFAULT) {
+	public static function clean(&$val, $method = Sanitize::SANITIZE_DEFAULT)
+	{
 		$regEx = '';
 
 		switch($method) {
@@ -59,7 +60,7 @@ class Sanitize {
 
 			case self::SANITIZE_EMAIL:
 				//$val = filter_var($val, FILTER_SANITIZE_EMAIL);
-				// Clean the "valid" email characeters: 
+				// Clean the "valid" email characeters:
 				//$val = str_replace('!#$%&\'*+-/=?^`{|}~\[]', NULL, $val);
 				$regEx = "/[^A-Z0-9@._-]/i";
 				break;
@@ -81,7 +82,8 @@ class Sanitize {
 	 * @param	Mixed	$item	The item
 	 * @return	Boolean
 	 */
-	public static function cleanAll(array &$arr) {
+	public static function cleanAll(array &$arr)
+	{
 		foreach($arr as $key => $value) {
 			Sanitize::clean($arr[$key]);
 		}

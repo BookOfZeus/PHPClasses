@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Captcha Class [ Captcha.class.php ]
  *
- * @author      Eric Potvin
- * @package 	PHPClasses
- * @subpackage  Captcha
- * @link        https://github.com/ericpotvin/phpclasses
+ * @package    PHPClasses
+ * @subpackage Encryption
+ * @author     Eric Potvin
+ * @link       https://github.com/ericpotvin/phpclasses
  */
 
 /**
@@ -31,13 +30,14 @@ class Captcha {
 	 * @param 	Integer	$len	Length of the string.
 	 * @return 	String
 	 */
-	private static function generateCode($len) {
+	private static function generateCode($len)
+	{
 		$possible = '23456789bcdfghjkmnpqrstvwxyz';
 		$code = '';
 		$i = 0;
 		$len = abs((int)$len);
-		while ($i < $len) { 
-			$code .= substr($possible, mt_rand(0, strlen($possible)-1), 1);
+		while($i < $len) {
+			$code .= substr($possible, mt_rand(0, (strlen($possible) - 1)), 1);
 			$i++;
 		}
 		return $code;
@@ -51,9 +51,9 @@ class Captcha {
 	 * @param 	Integer	$width	Width of the image.
 	 * @param 	Integer	$height	height of the image.
 	 */
-	public static function getImage($len = 6, $width = 120, $height = 40) {
-
-		if (!extension_loaded('gd')) {
+	public static function getImage($len = 6, $width = 120, $height = 40)
+	{
+		if(!extension_loaded('gd')) {
 			die('GD is not installed');
 		}
 
@@ -68,13 +68,27 @@ class Captcha {
 			return FALSE;
 		}
 		$background_color = imagecolorallocate($image, 255, 255, 255);
-		$text_color = imagecolorallocate($image, 41,54,67);
+		$text_color = imagecolorallocate($image, 41, 54, 67);
 		$noiseColor = imagecolorallocate($image, 150, 150, 150);
-		for($i = 0; $i < ($width*$height)/3; $i++) {
-			imagefilledellipse($image, mt_rand(0,$width), mt_rand(0,$height), 1, 1, $noiseColor);
+		for($i = 0; $i < ($width * $height) / 3; $i++) {
+			imagefilledellipse(
+				$image,
+				mt_rand(0, $width),
+				mt_rand(0, $height),
+				1,
+				1,
+				$noiseColor
+			);
 		}
-		for($i = 0; $i < ($width*$height) / 150; $i++) {
-			imageline($image, mt_rand(0,$width), mt_rand(0,$height), mt_rand(0,$width), mt_rand(0,$height), $noiseColor);
+		for($i = 0; $i < ($width * $height) / 150; $i++) {
+			imageline(
+				$image,
+				mt_rand(0, $width),
+				mt_rand(0, $height),
+				mt_rand(0, $width),
+				mt_rand(0, $height),
+				$noiseColor
+			);
 		}
 		$textbox = imagettfbbox($fontSize, 0, self::TTF, $code);
 		if(!$textbox) {
@@ -88,5 +102,4 @@ class Captcha {
 		imagedestroy($image);
 		$_SESSION['security_code'] = $code;
 	}
-
 }
